@@ -1,11 +1,348 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Galaxy Arena | Game Online</title>
+    <style>
+        :root {
+            --bg: #060816;
+            --panel: rgba(255, 255, 255, 0.08);
+            --text: #f8f9ff;
+            --muted: #aeb9d8;
+            --accent: #6d5cff;
+            --accent-2: #19d7ff;
+            --gold: #ffcd4d;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(29, 78, 216, 0.35), transparent 26%),
+                radial-gradient(circle at bottom right, rgba(25, 215, 255, 0.2), transparent 30%),
+                linear-gradient(135deg, #060816 0%, #0d1430 45%, #04070f 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            width: min(1200px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 24px 0 50px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.14);
+            backdrop-filter: blur(14px);
+        }
+
+        .brand {
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .brand span { color: var(--accent-2); }
+
+        nav a {
+            color: var(--muted);
+            text-decoration: none;
+            margin-left: 14px;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        nav a:hover { color: white; }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 24px;
+            margin-top: 28px;
+            align-items: center;
+        }
+
+        .hero-card, .showcase, .game-card {
+            background: var(--panel);
+            border: 1px solid rgba(255,255,255,0.13);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+            backdrop-filter: blur(16px);
+        }
+
+        .hero-card { padding: 28px; }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(25, 215, 255, 0.15);
+            color: #b7f6ff;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .pill::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-2);
+            box-shadow: 0 0 10px var(--accent-2);
+        }
+
+        h1 {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            line-height: 1.1;
+            margin: 0 0 12px;
+        }
+
+        .hero-card p { color: var(--muted); line-height: 1.7; }
+
+        .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+
+        button {
+            border: none;
+            border-radius: 999px;
+            padding: 12px 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover { transform: translateY(-2px); }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            color: white;
+            box-shadow: 0 10px 24px rgba(109, 92, 255, 0.35);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.12);
+            color: white;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .stat {
+            background: rgba(255,255,255,0.06);
+            padding: 12px 14px;
+            border-radius: 14px;
+        }
+
+        .stat strong { display: block; font-size: 1.1rem; }
+        .stat span { color: var(--muted); font-size: 0.9rem; }
+
+        .showcase { padding: 18px; }
+        .showcase img {
+            width: 100%;
+            border-radius: 18px;
+            display: block;
+        }
+
+        .showcase .badge-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 7px 10px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 999px;
+            color: #dce7ff;
+            font-size: 0.86rem;
+        }
+
+        .section-title {
+            margin: 28px 0 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .games {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .game-card { padding: 16px; }
+        .game-card .thumb {
+            height: 110px;
+            border-radius: 14px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, rgba(109,92,255,0.55), rgba(25,215,255,0.35));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card .thumb::before,
+        .game-card .thumb::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.25);
+        }
+
+        .game-card .thumb::before { width: 80px; height: 80px; right: 8px; top: 10px; }
+        .game-card .thumb::after { width: 120px; height: 120px; left: -20px; bottom: -30px; }
+
+        .game-card h3 { margin: 0 0 6px; }
+        .game-card p { margin: 0 0 10px; color: var(--muted); font-size: 0.95rem; }
+
+        .tag {
+            display: inline-block;
+            margin-right: 8px;
+            padding: 5px 8px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.1);
+            font-size: 0.78rem;
+            color: #d4e0ff;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: var(--muted);
+            margin-top: 24px;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 900px) {
+            .hero { grid-template-columns: 1fr; }
+            .games { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-    
+    <div class="container">
+        <header class="topbar">
+            <div class="brand">Galaxy <span>Arena</span></div>
+            <nav>
+                <a href="#">Trang chủ</a>
+                <a href="#">Game</a>
+                <a href="#">BXH</a>
+                <a href="#">Hỗ trợ</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <div class="hero-card">
+                <div class="pill">Đang mở 24/7 • Cực kỳ hot</div>
+                <h1>Tham gia game online đỉnh cao cùng bạn bè.</h1>
+                <p>Trải nghiệm những trận đấu mãn nhãn, nhận thưởng hấp dẫn và chinh phục xếp hạng với giao diện đẹp mắt, mượt mà và hiện đại.</p>
+                <div class="actions">
+                    <button class="btn-primary" id="playBtn">Bắt đầu chơi ngay</button>
+                    <button class="btn-secondary">Xem tin tức</button>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <strong id="playerCount">12.4k+</strong>
+                        <span>Người chơi online</span>
+                    </div>
+                    <div class="stat">
+                        <strong>320+</strong>
+                        <span>Giải đấu mỗi tuần</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="showcase">
+                <svg viewBox="0 0 600 420" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#10183f" />
+                            <stop offset="100%" stop-color="#030611" />
+                        </linearGradient>
+                        <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#6d5cff" />
+                            <stop offset="100%" stop-color="#19d7ff" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="600" height="420" rx="24" fill="url(#bgGradient)" />
+                    <circle cx="470" cy="110" r="70" fill="#ffcd4d" opacity="0.18" />
+                    <circle cx="140" cy="95" r="55" fill="#19d7ff" opacity="0.18" />
+                    <rect x="70" y="280" width="460" height="80" rx="20" fill="#0f1634" stroke="#2f3d72" />
+                    <rect x="95" y="120" width="180" height="120" rx="24" fill="#0d1430" stroke="#2f3d72" />
+                    <rect x="315" y="100" width="180" height="150" rx="24" fill="#10183f" stroke="#2f3d72" />
+                    <path d="M250 240 L320 160 L392 208 L424 176 L470 214" stroke="url(#glow)" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                    <circle cx="250" cy="240" r="18" fill="#ffcd4d" />
+                    <circle cx="320" cy="160" r="16" fill="#19d7ff" />
+                    <circle cx="392" cy="208" r="15" fill="#6d5cff" />
+                    <circle cx="470" cy="214" r="14" fill="#ffffff" />
+                    <rect x="110" y="140" width="84" height="16" rx="8" fill="#19d7ff" />
+                    <rect x="110" y="168" width="118" height="12" rx="6" fill="#6d5cff" opacity="0.85" />
+                    <rect x="340" y="124" width="100" height="12" rx="6" fill="#ffffff" opacity="0.8" />
+                    <rect x="340" y="150" width="80" height="10" rx="5" fill="#19d7ff" opacity="0.8" />
+                    <rect x="340" y="172" width="110" height="10" rx="5" fill="#6d5cff" opacity="0.8" />
+                    <rect x="110" y="320" width="140" height="18" rx="9" fill="#ffffff" opacity="0.9" />
+                    <rect x="270" y="320" width="180" height="18" rx="9" fill="#19d7ff" opacity="0.9" />
+                </svg>
+                <div class="badge-row">
+                    <span class="badge">⚡ Tốc độ cao</span>
+                    <span class="badge">🎮 PvP hấp dẫn</span>
+                    <span class="badge">🏆 Bảng xếp hạng</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-title">Game nổi bật</div>
+        <section class="games">
+            <div class="game-card">
+                <div class="thumb"></div>
+                <h3>Battle Royale</h3>
+                <p>Đấu trường 100 người, chiến thắng cuối cùng.</p>
+                <span class="tag">PvP</span><span class="tag">Hot</span>
+            </div>
+            <div class="game-card">
+                <div class="thumb"></div>
+                <h3>Racing Drift</h3>
+                <p>Đua tốc độ và bẻ lái cực chất trên đường đua.</p>
+                <span class="tag">Arcade</span>
+            </div>
+            <div class="game-card">
+                <div class="thumb"></div>
+                <h3>Strategy Clash</h3>
+                <p>Chiến thuật đội hình và phối hợp thông minh.</p>
+                <span class="tag">MOBA</span>
+            </div>
+        </section>
+
+        <p class="footer-note">Thiết kế web game online hiện đại, đẹp mắt và dễ dùng.</p>
+    </div>
+
+    <script>
+        const playBtn = document.getElementById('playBtn');
+        const playerCount = document.getElementById('playerCount');
+
+        playBtn.addEventListener('click', () => {
+            playBtn.textContent = 'Đang kết nối...';
+            playBtn.disabled = true;
+            setTimeout(() => {
+                playBtn.textContent = 'Vào phòng ngay';
+                playBtn.disabled = false;
+                playerCount.textContent = '13.1k+';
+            }, 1200);
+        });
+    </script>
 </body>
-</html>l
+</html>
